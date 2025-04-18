@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="795.0" prefWidth="1535.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.serenity_mental_center.controllers.AdminHomePageController">
+   <children>
+      <Pane prefHeight="795.0" prefWidth="252.0" style="-fx-background-color: gray;">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutX="31.0" layoutY="126.0" prefHeight="536.0" prefWidth="191.0" spacing="50.0">
+               <children>
+                  <Button fx:id="btnTherpist" mnemonicParsing="false" onAction="#navigateToTherapist" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Therapist ">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnTherapyProgran" mnemonicParsing="false" onAction="#navigateToTherapyProgram" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Therapy Program">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnAssignToProgram" mnemonicParsing="false" onAction="#navigateToAssignProgram" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Assign to program">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnUserManage" mnemonicParsing="false" onAction="#navigateToUserManagePage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="User Manage">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnPatientManage" mnemonicParsing="false" onAction="#navigateToPatient" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Patient Manage">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnRegisterProgram" mnemonicParsing="false" onAction="#navigateRegisterPage" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Register to Programs">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnTherapySession" mnemonicParsing="false" onAction="#navigateToTherapySession" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Theropy Session">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnPayments" mnemonicParsing="false" onAction="#navigateToPayment" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Payments">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnReports" mnemonicParsing="false" onAction="#navigateToReports" prefHeight="27.0" prefWidth="153.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Reports">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </VBox>
+            <Label alignment="CENTER" layoutX="65.0" layoutY="24.0" onMouseClicked="#navigateToHomePage" prefHeight="27.0" prefWidth="122.0" text="Home">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane fx:id="bodyPane" layoutX="268.0" layoutY="15.0" prefHeight="754.0" prefWidth="1252.0" style="-fx-background-color: #EEEEEE;">
+         <children>
+            <Label layoutX="12.0" layoutY="32.0" prefHeight="99.0" prefWidth="1229.0" text="Welcome To Serenity Mental Health Center">
+               <font>
+                  <Font name="System Bold" size="58.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

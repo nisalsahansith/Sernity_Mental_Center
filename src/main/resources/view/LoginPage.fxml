@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="pageName" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1535.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.serenity_mental_center.controllers.LoginController">
+   <children>
+      <Label layoutX="460.0" layoutY="14.0" prefHeight="54.0" prefWidth="614.0" text="SERNETY MENTAL HEALTH CENTER">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="584.0" fitWidth="593.0" layoutX="143.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/Mental.jpeg" />
+         </image>
+      </ImageView>
+      <Pane layoutX="843.0" layoutY="155.0" opacity="0.53" prefHeight="470.0" prefWidth="506.0" style="-fx-background-color: black; -fx-border-radius: 15px;">
+         <children>
+            <Label alignment="CENTER" layoutX="167.0" layoutY="39.0" prefHeight="24.0" prefWidth="174.0" text="Sign in" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Group layoutX="40.0" layoutY="186.0">
+               <children>
+                  <Label prefHeight="27.0" prefWidth="108.0" text="Username " textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutY="71.0" prefHeight="27.0" prefWidth="108.0" text="Password" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="password" layoutX="138.0" layoutY="71.0" prefHeight="27.0" prefWidth="289.0" promptText="1234jhone#@!" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 5px;" />
+                  <TextField fx:id="username" layoutX="138.0" layoutY="1.0" prefHeight="25.0" prefWidth="289.0" promptText="\@jhone_doe" style="-fx-background-color: transparent; -fx-border-color: white; -fx-border-radius: 5px;" />
+               </children>
+            </Group>
+            <Label alignment="CENTER" layoutX="72.0" layoutY="104.0" prefHeight="27.0" prefWidth="364.0" text="Sign in with your credential" textFill="WHITE" />
+            <Button fx:id="btnSignIn" layoutX="149.0" layoutY="334.0" mnemonicParsing="false" onAction="#navigateToHome" prefHeight="25.0" prefWidth="211.0" style="-fx-background-radius: 20; -fx-border-radius: 20; -fx-background-color: black; -fx-text-fill: white; -fx-border-color: white;" text="Sign in" />
+            <Label alignment="CENTER" layoutX="71.0" layoutY="376.0" prefHeight="27.0" prefWidth="364.0" text="If you Don't Have account? Signup" textFill="WHITE" />
+            <Label alignment="CENTER" layoutX="71.0" layoutY="403.0" prefHeight="27.0" prefWidth="364.0" text="Forgot Password" textFill="WHITE" />
+            <Label fx:id="erroMsg" alignment="CENTER" layoutX="110.0" layoutY="157.0" prefHeight="17.0" prefWidth="289.0" textFill="RED" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
