@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -20,7 +23,25 @@ public class Custom {
     private String Day;
     public LocalTime start;
     public LocalTime end;
+    public Time startTime;
+    public Time endTime;
+    public Date date;
+    public String time;
 
+    public Custom(Date date, String time) {
+        this.date = date;
+        this.time = time;
+    }
+
+    public Custom(Time startTime, Time endTime) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public Custom(String time, Date date) {
+        this.time = time;
+        this.date = date;
+    }
 
     public Custom(String day, String availableTimeList) {
         this.day = day;
@@ -49,4 +70,9 @@ public class Custom {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
         return start.format(formatter) + " - " + end.format(formatter);
     }
+
+//    public String getDay() {
+//        // You can implement a method to return the day of the week if needed
+//        return new SimpleDateFormat("EEEE").format(date);
+//    }
 }

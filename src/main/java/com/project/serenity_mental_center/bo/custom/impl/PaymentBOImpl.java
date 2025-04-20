@@ -64,4 +64,22 @@ public class PaymentBOImpl {
         );
         return paymentDAO.update(payment);
     }
+
+    public PaymentDto getAllById(String paymentId) {
+        Payment payment = paymentDAO.getAllById(paymentId);
+        return new PaymentDto(
+                payment.getProgram().getId(),
+                payment.getPatient().getId(),
+                payment.getDate(),
+                payment.getBalance(),
+                payment.getStatus(),
+                payment.getInstallment(),
+                payment.getAmount(),
+                payment.getId()
+        );
+    }
+
+    public boolean delete(String paymentId) {
+        return paymentDAO.delete(paymentId);
+    }
 }

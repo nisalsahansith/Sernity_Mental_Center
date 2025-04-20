@@ -31,4 +31,7 @@ public class PatientProgram {
 
     Date registration_date;
 
+    @OneToOne
+    @JoinColumn(name="payment_id")
+    private Payment payment;
 }

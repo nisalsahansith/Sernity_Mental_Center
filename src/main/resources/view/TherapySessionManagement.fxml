@@ -61,7 +61,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="btnCancle" layoutX="483.0" mnemonicParsing="false" onAction="#cancleSession" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: black; -fx-text-fill: white;" text="Cancle">
+            <Button fx:id="btnCancle" layoutX="483.0" mnemonicParsing="false" onAction="#cancleSession" prefHeight="27.0" prefWidth="153.0" style="-fx-background-color: black; -fx-text-fill: white;" text="Remove">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -90,7 +90,7 @@
       </Group>
       <Group layoutX="107.0" layoutY="190.0" />
       <ComboBox fx:id="cmbTherapistId" layoutX="795.0" layoutY="187.0" prefHeight="28.0" prefWidth="275.0" style="-fx-background-color: white; -fx-border-color: black;" />
-      <TableView fx:id="tableAvailability" layoutX="108.0" layoutY="232.0" prefHeight="110.0" prefWidth="1006.0">
+      <TableView fx:id="tableAvailability" layoutX="108.0" layoutY="232.0"  prefHeight="110.0" prefWidth="1006.0">
         <columns>
           <TableColumn fx:id="colDay" prefWidth="316.7999725341797" text="Day" />
           <TableColumn fx:id="colTime" prefWidth="687.199951171875" text="Time" />
@@ -122,7 +122,7 @@
          </children>
       </Group>
       <Label fx:id="lblStartTime" layoutX="680.0" layoutY="391.0" prefHeight="17.0" prefWidth="140.0" text="(08:00)" />
-      <Label fx:id="lblEndTime" layoutX="974.0" layoutY="391.0" prefHeight="17.0" prefWidth="140.0" text="(12:00)" />
+      <Label fx:id="lblEndTime" layoutX="974.0" layoutY="391.0" prefHeight="17.0" prefWidth="140.0" text="(00:00)" />
       <Group layoutX="106.0" layoutY="186.0">
          <children>
             <Label layoutY="1.0" prefHeight="27.0" prefWidth="143.0" text="Program ID:">

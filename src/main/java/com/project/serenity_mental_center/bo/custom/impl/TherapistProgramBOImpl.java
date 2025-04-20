@@ -5,14 +5,10 @@ import com.project.serenity_mental_center.dto.Custom;
 import com.project.serenity_mental_center.dto.TherapistProgramDto;
 import com.project.serenity_mental_center.entity.TherapistProgram;
 import com.project.serenity_mental_center.entity.TherapistProgramId;
-import com.project.serenity_mental_center.entity.TherapyProgram;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TherapistProgramBOImpl {
     TherapistProgramDAOImpl therapistProgramDAO = new TherapistProgramDAOImpl();

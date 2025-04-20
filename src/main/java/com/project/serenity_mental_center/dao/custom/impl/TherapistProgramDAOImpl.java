@@ -121,8 +121,31 @@ public class TherapistProgramDAOImpl {
 
         try {
             transaction = session.beginTransaction();
-            Query<TherapistProgram> query = session.createQuery("FROM TherapistProgram tp WHERE tp.id = :programId", TherapistProgram.class); // Query for Patient entities
-            query.setParameter("id",programId);
+            Query<TherapistProgram> query = session.createQuery("FROM TherapistProgram tp WHERE tp.programId.id = :programId", TherapistProgram.class); // Query for Patient entities
+            query.setParameter("programId",programId);
+            therapyPrograms = (List<TherapistProgram>) query.list(); // Retrieve list of patients
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return (ArrayList<TherapistProgram>) therapyPrograms;
+    }
+
+    public ArrayList<TherapistProgram> getAllByIDS(String programId, String therapistId) {
+        Session session = factoryConfiguration.getSession();
+        Transaction transaction = null;
+        List<TherapistProgram> therapyPrograms = null;
+
+        try {
+            transaction = session.beginTransaction();
+            Query<TherapistProgram> query = session.createQuery("FROM TherapistProgram tp WHERE tp.programId.id = :programId AND tp.therapistId.id = :therapistId", TherapistProgram.class); // Query for Patient entities
+            query.setParameter("programId",programId);
+            query.setParameter("therapistId",therapistId);
             therapyPrograms = (List<TherapistProgram>) query.list(); // Retrieve list of patients
             transaction.commit();
         } catch (Exception e) {

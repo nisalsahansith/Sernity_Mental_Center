@@ -17,7 +17,8 @@ public class PatientProgramBOImpl {
             PatientProgramDto patientProgramDto = new PatientProgramDto(
                     program.getPatientId().getId(),
                     program.getProgramId().getId(),
-                    program.getRegistration_date()
+                    program.getRegistration_date(),
+                    program.getPayment().getId()
             );
             patientProgramDtos.add(patientProgramDto);
         }
@@ -36,7 +37,7 @@ public class PatientProgramBOImpl {
 //                    therapyProgram,
 //                    patientProgramDto.getRegisterDate()
 //            );
-            boolean isSave = patientProgramDAO.save(patientProgramId,paymentDto.getPatientId(),paymentDto.getProgramId(),patientProgramDto.getRegisterDate());
+            boolean isSave = patientProgramDAO.save(patientProgramId,paymentDto.getPatientId(),paymentDto.getProgramId(),patientProgramDto.getRegisterDate(),patientProgramDto.getPaymentId());
             System.out.println(isSave);
             return isSave;
         }else {
@@ -52,7 +53,7 @@ public class PatientProgramBOImpl {
         boolean isUpdatePayment = updatePayment(paymentDto);
         if (isUpdatePayment){
             PatientProgramId patientProgramId = new PatientProgramId(paymentDto.getPatientId(),paymentDto.getProgramId());
-            boolean isUpdate = patientProgramDAO.update(patientProgramId,paymentDto.getPatientId(),paymentDto.getProgramId(),patientProgramDto.getRegisterDate());
+            boolean isUpdate = patientProgramDAO.update(patientProgramId,paymentDto.getPatientId(),paymentDto.getProgramId(),patientProgramDto.getRegisterDate(),patientProgramDto.getPaymentId());
             System.out.println(isUpdate);
             return isUpdate;
         }else {
@@ -62,5 +63,20 @@ public class PatientProgramBOImpl {
 
     public boolean updatePayment(PaymentDto paymentDto) {
         return paymentBO.updatePayment(paymentDto);
+    }
+
+    public boolean deletePatientProgram(String programId, String patientId, String paymentId) {
+        PatientProgramId patientProgramId = new PatientProgramId(patientId, programId);
+        return patientProgramDAO.delete(patientProgramId);
+    }
+
+    public ArrayList<String> getProgramsIdByPatient(String patientId) {
+        ArrayList<PatientProgram> patientPrograms = patientProgramDAO.getAllByID(patientId);
+        System.out.println(patientPrograms.isEmpty());
+        ArrayList<String> therapyID = new ArrayList<>();
+        for (PatientProgram program : patientPrograms){
+            therapyID.add(program.getProgramId().getId());
+        }
+        return therapyID;
     }
 }

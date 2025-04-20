@@ -1,26 +1,25 @@
 package com.project.serenity_mental_center.controllers;
 
 import com.project.serenity_mental_center.bo.custom.impl.*;
+import com.project.serenity_mental_center.dto.Custom;
 import com.project.serenity_mental_center.dto.TherapySessionDTO;
+import com.project.serenity_mental_center.dto.tm.TherapistAvailableTimeTM;
 import com.project.serenity_mental_center.dto.tm.TherapySessionTM;
-import com.project.serenity_mental_center.entity.TherapistProgram;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -48,31 +47,30 @@ public class TherapySessionController implements Initializable {
     private ComboBox<String> cmbTherapistId;
 
     @FXML
-    private TableColumn<?, ?> colDate;
+    private TableColumn<Date, TherapySessionTM> colDate;
+    @FXML
+    private TableColumn<Time, TherapySessionTM> colEndTime;
 
     @FXML
-    private TableColumn<?, ?> colDay;
+    private TableColumn<String, TherapySessionTM> colPatientId;
 
     @FXML
-    private TableColumn<?, ?> colEndTime;
+    private TableColumn<String, TherapySessionTM> colProgramId;
 
     @FXML
-    private TableColumn<?, ?> colPatientId;
+    private TableColumn<String, TherapySessionTM> colSessionId;
 
     @FXML
-    private TableColumn<?, ?> colProgramId;
+    private TableColumn<Time, TherapySessionTM> colStartTime;
 
     @FXML
-    private TableColumn<?, ?> colSessionId;
+    private TableColumn<String, TherapySessionTM> colTherapistId;
 
     @FXML
-    private TableColumn<?, ?> colStartTime;
+    private TableColumn<TherapistAvailableTimeTM,Date> colDay;
 
     @FXML
-    private TableColumn<?, ?> colTherapistId;
-
-    @FXML
-    private TableColumn<?, ?> colTime;
+    private TableColumn<TherapistAvailableTimeTM,String> colTime;
 
     @FXML
     private DatePicker datePicker;
@@ -84,7 +82,7 @@ public class TherapySessionController implements Initializable {
     private Label lblStartTime;
 
     @FXML
-    private TableView<?> tableAvailability;
+    private TableView<TherapistAvailableTimeTM> tableAvailability;
 
     @FXML
     private TableView<TherapySessionTM> tableSession;
@@ -106,10 +104,39 @@ public class TherapySessionController implements Initializable {
     PatientBOImpl patientBO = new PatientBOImpl();
     TherapistBOImpl therapistBO = new TherapistBOImpl();
     TherapistProgramBOImpl therapistProgramBO = new TherapistProgramBOImpl();
+    PatientProgramBOImpl patientProgramBO = new PatientProgramBOImpl();
 
     @FXML
     void addSession(ActionEvent event) {
+        String sessionId = txtSessionId.getText();
+        String patientId = cmbPatientId.getSelectionModel().getSelectedItem();
+        String programId = cmbProgramId.getSelectionModel().getSelectedItem();
+        String therapistId = cmbTherapistId.getSelectionModel().getSelectedItem();
+        Date date = Date.valueOf(datePicker.getValue());
+        String start = txtStartTime.getText().trim();
+        String end = txtEndTime.getText().trim();
 
+        if (start.matches("\\d{2}:\\d{2}")) start += ":00";
+        if (end.matches("\\d{2}:\\d{2}")) end += ":00";
+
+        Time startTime = Time.valueOf(start);
+        Time endTime = Time.valueOf(end);
+        TherapySessionDTO therapySessionDTO = new TherapySessionDTO(
+                sessionId,
+                date,
+                startTime,
+                endTime,
+                therapistId,
+                patientId,
+                programId
+        );
+        boolean isSave = therapySessionBO.saveTherapySession(therapySessionDTO);
+        if (isSave){
+            new Alert(Alert.AlertType.INFORMATION,"Therapy Session Save Successful").show();
+            refreshPage();
+        }else {
+            new Alert(Alert.AlertType.INFORMATION,"Therapy Session not Save Successful").show();
+        }
     }
 
     @FXML
@@ -119,17 +146,55 @@ public class TherapySessionController implements Initializable {
 
     @FXML
     void rescheduleSession(ActionEvent event) {
+        String sessionId = txtSessionId.getText();
+        String patientId = cmbPatientId.getSelectionModel().getSelectedItem();
+        String programId = cmbProgramId.getSelectionModel().getSelectedItem();
+        String therapistId = cmbTherapistId.getSelectionModel().getSelectedItem();
+        Date date = Date.valueOf(datePicker.getValue());
+        String start = txtStartTime.getText().trim();
+        String end = txtEndTime.getText().trim();
 
+        if (start.matches("\\d{2}:\\d{2}")) start += ":00";
+        if (end.matches("\\d{2}:\\d{2}")) end += ":00";
+
+        Time startTime = Time.valueOf(start);
+        Time endTime = Time.valueOf(end);
+        TherapySessionDTO therapySessionDTO = new TherapySessionDTO(
+                sessionId,
+                date,
+                startTime,
+                endTime,
+                therapistId,
+                patientId,
+                programId
+        );
+        boolean isUpdate = therapySessionBO.updateTherapySession(therapySessionDTO);
+        if (isUpdate){
+            new Alert(Alert.AlertType.INFORMATION,"Therapy Session Update Successful").show();
+            refreshPage();
+        }else {
+            new Alert(Alert.AlertType.INFORMATION,"Therapy Session Update Not Successful").show();
+        }
     }
+
+
 
     @FXML
     void resetPage(ActionEvent event) {
-
+        refreshPage();
     }
 
     @FXML
     void tableClick(MouseEvent event) {
-
+        TherapySessionTM tm = tableSession.getSelectionModel().getSelectedItem();
+        txtSessionId.setText(tm.getId());
+        cmbPatientId.setValue(tm.getPatientId());
+        cmbProgramId.setValue(tm.getTherapyProgramID());
+        cmbTherapistId.setValue(tm.getTherapistId());
+        LocalDate localDate = tm.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        datePicker.setValue(localDate);
+        txtStartTime.setText(String.valueOf(tm.getStartTime()));
+        txtEndTime.setText(String.valueOf(tm.getEndTime()));
     }
 
     @Override
@@ -141,11 +206,28 @@ public class TherapySessionController implements Initializable {
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colStartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         colEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        colDay.setCellValueFactory(new PropertyValueFactory<>("date"));
+        colTime.setCellValueFactory(new PropertyValueFactory<>("time"));
         try {
             refreshPage();
-            setProgramIds();
             setPatientIds();
-            setTherapistIds();
+            cmbPatientId.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+                if (newValue != null) {
+                    cmbProgramId.setDisable(false);
+                    setProgramIds();
+                }
+            });
+            cmbProgramId.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+                if (newValue != null) {
+                    cmbTherapistId.setDisable(false);
+                    setTherapistIds();
+                }
+            });
+            cmbTherapistId.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+                if (newValue != null) {
+                    setTimeTable();
+                }
+            });
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -160,7 +242,12 @@ public class TherapySessionController implements Initializable {
         txtEndTime.setText("");
         txtStartTime.setText("");
         datePicker.cancelEdit();
+
+        cmbProgramId.getItems().clear();
+        cmbTherapistId.getItems().clear();
+        cmbProgramId.setDisable(true);
         cmbTherapistId.setDisable(true);
+        tableAvailability.getItems().clear();
     }
 
     public void refreshTable(){
@@ -181,10 +268,19 @@ public class TherapySessionController implements Initializable {
         tableSession.setItems(therapySessionTMS);
     }
 
+
     public void setProgramIds(){
-        cmbProgramId.setPromptText("Select Program ID");
-        ArrayList<String> iDS = therapyProgramBO.getAllProgramId();
-        cmbProgramId.getItems().addAll(iDS);
+        String patientId = cmbPatientId.getSelectionModel().getSelectedItem();
+        System.out.println(patientId);
+        if (patientId == null) {
+            cmbProgramId.setPromptText("Select Program ID");
+            ArrayList<String> iDS = therapyProgramBO.getAllProgramId();
+            cmbProgramId.getItems().addAll(iDS);
+        } else {
+            ArrayList<String> IDS = patientProgramBO.getProgramsIdByPatient(patientId);
+            System.out.println(IDS);
+            cmbProgramId.getItems().addAll(IDS);
+        }
     }
 
     public void setPatientIds(){
@@ -196,14 +292,27 @@ public class TherapySessionController implements Initializable {
     public void setTherapistIds(){
         String programId = cmbProgramId.getSelectionModel().getSelectedItem();
         cmbTherapistId.setPromptText("Select Therapist ID");
-        if (programId.isEmpty()){
-            cmbTherapistId.setDisable(false);
+        if (programId == null){
             ArrayList<String> therapistId = therapistBO.getAllTherapistId();
             cmbTherapistId.getItems().addAll(therapistId);
         }else{
             ArrayList<String> IDS = therapistProgramBO.getTherapistId(programId);
             cmbTherapistId.getItems().addAll(IDS);
-            cmbTherapistId.setDisable(true);
         }
+    }
+
+    public void setTimeTable(){
+        String programId = cmbProgramId.getSelectionModel().getSelectedItem();
+        String therapistId = cmbTherapistId.getSelectionModel().getSelectedItem();
+        ArrayList<Custom> customs = therapySessionBO.getAvailableTime(programId,therapistId);
+        ObservableList<TherapistAvailableTimeTM> timeTMS = FXCollections.observableArrayList();
+        for (Custom custom : customs){
+            TherapistAvailableTimeTM timeTM = new TherapistAvailableTimeTM(
+                    custom.getDate(),
+                    custom.getTime()
+            );
+            timeTMS.add(timeTM);
+        }
+        tableAvailability.setItems(timeTMS);
     }
 }

@@ -36,4 +36,14 @@ public class TherapySession {
 
     @OneToMany(mappedBy = "therapySession", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payment> payments;
+
+    public TherapySession(String id, Date date, Time startTime, Time endTime, Therapist therapist, Patient patient, TherapyProgram therapyProgram) {
+        this.id = id;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.therapist = therapist;
+        this.patient = patient;
+        this.therapyProgram = therapyProgram;
+    }
 }

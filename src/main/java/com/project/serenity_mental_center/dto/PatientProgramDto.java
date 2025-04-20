@@ -16,4 +16,5 @@ public class PatientProgramDto {
     String patientId;
     String programId;
     Date registerDate;
+    String paymentId;
 }

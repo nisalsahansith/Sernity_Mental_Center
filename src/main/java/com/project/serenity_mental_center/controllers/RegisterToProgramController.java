@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RegisterToProgramController implements Initializable {
@@ -44,6 +45,9 @@ public class RegisterToProgramController implements Initializable {
 
     @FXML
     private ComboBox<String> cmbPrograms;
+
+    @FXML
+    private TableColumn<String, PatientProgramTM> colPayId;
 
     @FXML
     private TableColumn<String, PatientProgramTM> colPatientId;
@@ -91,22 +95,46 @@ public class RegisterToProgramController implements Initializable {
 
     @FXML
     void delete(ActionEvent event) {
+        String programId = cmbPrograms.getSelectionModel().getSelectedItem();
+        String patientId = cmbPatientId.getSelectionModel().getSelectedItem();
+        String paymentId = txtPaymentId.getText();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure want to Delete this Patients Program!",ButtonType.YES);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES){
+            boolean isDelete = patientProgramBO.deletePatientProgram(programId,patientId,paymentId);
+            if (isDelete){
+                new Alert(Alert.AlertType.INFORMATION,"Patient Program delete success").show();
+                refreshPage();
+            }else {
+                new Alert(Alert.AlertType.INFORMATION,"Patient Program delete not success").show();
+            }
+        }
+
+    }
+
+    @FXML
+    void onClick(MouseEvent event) {
         PatientProgramTM selectedPatientProgram = tableRegistration.getSelectionModel().getSelectedItem();
         if (selectedPatientProgram != null){
             cmbPrograms.setValue(selectedPatientProgram.getProgramId());
             cmbPatientId.setValue(selectedPatientProgram.getPatientId());
             datePick.setValue(selectedPatientProgram.getRegisterDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            txtPaymentId.setText(selectedPatientProgram.getPaymentId());
+            PaymentDto paymentDto = paymentBO.getAllById(selectedPatientProgram.getPaymentId());
+            txtAmmount.setText(String.valueOf(paymentDto.getAmount()));
+            txtBalance.setText(String.valueOf(paymentDto.getBalance()));
+            txtStatus.setText(paymentDto.getStatus());
+            txtInstallement.setText(paymentDto.getInstallment());
+
+            btnRemove.setDisable(false);
+            btnUpdate.setDisable(false);
+            btnAdd.setDisable(true);
         }
     }
 
     @FXML
-    void onClick(MouseEvent event) {
-
-    }
-
-    @FXML
     void resetPage(ActionEvent event) {
-
+        refreshPage();
     }
 
     @FXML
@@ -133,7 +161,8 @@ public class RegisterToProgramController implements Initializable {
         PatientProgramDto patientProgramDto = new PatientProgramDto(
                 patientId,
                 programId,
-                date
+                date,
+                paymentId
         );
         boolean isSave = patientProgramBO.savePatientProgram(patientProgramDto,paymentDto);
         if (isSave){
@@ -168,7 +197,8 @@ public class RegisterToProgramController implements Initializable {
         PatientProgramDto patientProgramDto = new PatientProgramDto(
                 patientId,
                 programId,
-                date
+                date,
+                paymentId
         );
         boolean isUpdate = patientProgramBO.updatePatientProgram(patientProgramDto,paymentDto);
         if (isUpdate){
@@ -198,6 +228,7 @@ public class RegisterToProgramController implements Initializable {
         colPatientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
         colProgramId.setCellValueFactory(new PropertyValueFactory<>("programId"));
         colRegDate.setCellValueFactory(new PropertyValueFactory<>("registerDate"));
+        colPayId.setCellValueFactory(new PropertyValueFactory<>("paymentId"));
         try {
             refreshPage();
             setPatientId();
@@ -213,6 +244,7 @@ public class RegisterToProgramController implements Initializable {
         cmbPatientId.setValue("");
         txtAmmount.setText("");
         txtBalance.setText("");
+        datePick.setValue(null);
         txtInstallement.setText("");
         txtStatus.setText("");
         txtPaymentId.setText(paymentBO.getNextId());
@@ -229,7 +261,8 @@ public class RegisterToProgramController implements Initializable {
             PatientProgramTM patientProgramTM = new PatientProgramTM(
                     patientProgramDto.getPatientId(),
                     patientProgramDto.getProgramId(),
-                    patientProgramDto.getRegisterDate()
+                    patientProgramDto.getRegisterDate(),
+                    patientProgramDto.getPaymentId()
             );
             patientProgramTMS.add(patientProgramTM);
         }
