@@ -12,12 +12,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class LoginController{
+
+    @FXML
+    private Pane bodyPane;
 
     @FXML
     private Button btnSignIn;
@@ -56,11 +61,25 @@ public class LoginController{
 
     }
 
+
+    @FXML
+    void navigateSignUpPage(MouseEvent event) {
+        try {
+            bodyPane.getChildren().clear();
+            Parent signUpUI = FXMLLoader.load(getClass().getResource("/view/SignUpPage.fxml"));
+            bodyPane.getChildren().add(signUpUI);
+            bodyPane.setStyle("-fx-background-color: transparent");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void navigatePage(ActionEvent event,String path, String name) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Parent homePageRoot = loader.load();
             Scene homeScene = new Scene(homePageRoot);
+            homePageRoot.setEffect(null);
 
             Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             primaryStage.setScene(homeScene);

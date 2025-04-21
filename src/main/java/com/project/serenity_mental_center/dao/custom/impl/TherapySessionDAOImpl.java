@@ -143,4 +143,25 @@ public class TherapySessionDAOImpl {
             }
         }
     }
+
+    public boolean delete(String sessionId) {
+        Session session = factoryConfiguration.getSession();
+        Transaction transaction = session.beginTransaction();
+        try {
+            TherapySession therapySession = session.get(TherapySession.class, sessionId);
+            if (therapySession !=null){
+                session.remove(therapySession);
+                transaction.commit();
+                return true;
+            }
+            return false;
+        }catch (Exception e) {
+            transaction.rollback();
+            return false;
+        }finally {
+            if (session != null){
+                session.close();
+            }
+        }
+    }
 }

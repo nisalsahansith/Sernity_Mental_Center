@@ -3,9 +3,14 @@ package com.project.serenity_mental_center.dao.custom.impl;
 import com.project.serenity_mental_center.config.FactoryConfiguration;
 import com.project.serenity_mental_center.entity.Patient;
 import com.project.serenity_mental_center.entity.Payment;
+import com.project.serenity_mental_center.entity.TherapyProgram;
+import com.project.serenity_mental_center.entity.TherapySession;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PaymentDAOImpl {
     FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
@@ -34,10 +39,28 @@ public class PaymentDAOImpl {
         }
     }
 
-    public boolean update(Payment payment) {
+    public boolean update(Payment payment, String therapySessionId, String patientId, String programId) {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = session.beginTransaction();
+        TherapySession therapySession = session.get(TherapySession.class,therapySessionId);
+        Patient patient = session.get(Patient.class,patientId);
+        TherapyProgram therapyProgram = session.get(TherapyProgram.class,programId);
+        payment.setPatient(patient);
+        payment.setTherapySession(therapySession);
+        payment.setProgram(therapyProgram);
         try {
+            if (patient == null) {
+                System.err.println("Patient not found for ID: " + patientId);
+                transaction.rollback();
+                return false;
+            }
+
+            if (therapyProgram == null) {
+                System.err.println("TherapyProgram not found for ID: " + programId);
+                transaction.rollback();
+                return false;
+            }
+
             session.merge(payment);
             transaction.commit();
             return true;
@@ -92,5 +115,26 @@ public class PaymentDAOImpl {
                 session.close();
             }
         }
+    }
+
+    public ArrayList<Payment> getAll() {
+        Session session = factoryConfiguration.getSession();
+        Transaction transaction = null;
+        List<Payment> payments = null;
+
+        try {
+            transaction = session.beginTransaction();
+            Query<Payment> query = session.createQuery("FROM Payment", Payment.class); // Query for Patient entities
+            payments = (List<Payment>) query.list(); // Retrieve list of patients
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return (ArrayList<Payment>) payments;
     }
 }

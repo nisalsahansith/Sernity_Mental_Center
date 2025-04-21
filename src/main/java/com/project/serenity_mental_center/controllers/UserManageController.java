@@ -1,21 +1,24 @@
 package com.project.serenity_mental_center.controllers;
 
 import com.project.serenity_mental_center.bo.custom.impl.UserBOImpl;
+import com.project.serenity_mental_center.dto.UserDto;
+import com.project.serenity_mental_center.dto.tm.UserTM;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class UserManageController {
-    @FXML
-    private TextField TxtUserName;
-
-    @FXML
-    private Button btnAdd;
+public class UserManageController implements Initializable {
 
     @FXML
     private Button btnDelete;
@@ -24,13 +27,25 @@ public class UserManageController {
     private Button btnReset;
 
     @FXML
-    private Button btnUpdate;
+    private TableColumn<String, UserTM> colEmail;
 
     @FXML
-    private Pane userPane;
+    private TableColumn<String, UserTM> colName;
 
     @FXML
-    private TableView<?> tableUser;
+    private TableColumn<String, UserTM> colPassword;
+
+    @FXML
+    private TableColumn<String, UserTM> colRole;
+
+    @FXML
+    private TableColumn<String, UserTM> colUserId;
+
+    @FXML
+    private TableColumn<String, UserTM> colUserName;
+
+    @FXML
+    private TableView<UserTM> tableUser;
 
     @FXML
     private TextField txtEmail;
@@ -39,34 +54,83 @@ public class UserManageController {
     private TextField txtName;
 
     @FXML
-    private PasswordField txtPassword;
+    private TextField txtUserId;
 
     @FXML
-    private TextField txtUserId;
+    private Pane userPane;
 
     UserBOImpl userBO = new UserBOImpl();
 
     @FXML
-    void addProgram(ActionEvent event) {
+    void deleteProgram(ActionEvent event) {
         String userId = txtUserId.getText();
-        String userName = txtName.getText();
-        String password = txtPassword.getText();
-        String email = txtEmail.getText();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure want to delete this user",ButtonType.YES);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES){
+            boolean isDelete = userBO.deleteUser(userId);
+            if(isDelete){
+                new Alert(Alert.AlertType.INFORMATION,"Session Deleted successfully").show();
+                refreshPAge();
+            }else{
+                new Alert(Alert.AlertType.WARNING,"Session is not Delete").show();
+            }
+        }
     }
 
     @FXML
-    void deleteProgram(ActionEvent event) {
-
+    void onClickTable(MouseEvent event) {
+        UserTM userTM = tableUser.getSelectionModel().getSelectedItem();
+        if (userTM != null){
+            txtUserId.setText(userTM.getId());
+            txtName.setText(userTM.getName());
+            txtEmail.setText(userTM.getEmail());
+        }else {
+            System.out.println("nulls");
+        }
     }
 
     @FXML
     void resetPage(ActionEvent event) {
-
+        refreshPAge();
     }
 
-    @FXML
-    void updateProgram(ActionEvent event) {
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
+        colUserId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
+        colUserName.setCellValueFactory(new PropertyValueFactory<>("username"));
+        try {
+            refreshPAge();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    public void refreshPAge(){
+        refreshTable();
+        txtEmail.setText("");
+        txtName.setText("");
+        txtUserId.setText("");
+    }
+
+    public void refreshTable(){
+        ArrayList<UserDto> userDtos = userBO.getAllUsers();
+        ObservableList<UserTM> userTMS = FXCollections.observableArrayList();
+        for (UserDto userDto : userDtos){
+            UserTM userTM = new UserTM(
+                    userDto.getId(),
+                    userDto.getName(),
+                    userDto.getUsername(),
+                    userDto.getPassword(),
+                    userDto.getRole(),
+                    userDto.getEmail()
+            );
+            userTMS.add(userTM);
+        }
+        tableUser.setItems(userTMS);
+    }
 }

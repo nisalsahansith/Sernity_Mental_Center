@@ -90,7 +90,7 @@
       </Group>
       <Group layoutX="107.0" layoutY="190.0" />
       <ComboBox fx:id="cmbTherapistId" layoutX="795.0" layoutY="187.0" prefHeight="28.0" prefWidth="275.0" style="-fx-background-color: white; -fx-border-color: black;" />
-      <TableView fx:id="tableAvailability" layoutX="108.0" layoutY="232.0"  prefHeight="110.0" prefWidth="1006.0">
+      <TableView fx:id="tableAvailability" layoutX="108.0" layoutY="232.0" prefHeight="110.0" prefWidth="1006.0">
         <columns>
           <TableColumn fx:id="colDay" prefWidth="316.7999725341797" text="Day" />
           <TableColumn fx:id="colTime" prefWidth="687.199951171875" text="Time" />

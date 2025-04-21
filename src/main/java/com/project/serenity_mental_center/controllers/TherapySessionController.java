@@ -21,6 +21,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class TherapySessionController implements Initializable {
@@ -141,7 +142,18 @@ public class TherapySessionController implements Initializable {
 
     @FXML
     void cancleSession(ActionEvent event) {
-
+        String sessionId = txtSessionId.getText();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this session?", ButtonType.YES);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES){
+            boolean isDelete = therapySessionBO.deleteSession(sessionId);
+            if(isDelete){
+                new Alert(Alert.AlertType.INFORMATION,"Session Deleted successfully").show();
+                refreshPage();
+            }else{
+                new Alert(Alert.AlertType.WARNING,"Session is not Delete").show();
+            }
+        }
     }
 
     @FXML
@@ -195,6 +207,7 @@ public class TherapySessionController implements Initializable {
         datePicker.setValue(localDate);
         txtStartTime.setText(String.valueOf(tm.getStartTime()));
         txtEndTime.setText(String.valueOf(tm.getEndTime()));
+        setTimeTable();
     }
 
     @Override

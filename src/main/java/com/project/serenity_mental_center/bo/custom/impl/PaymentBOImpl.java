@@ -48,21 +48,19 @@ public class PaymentBOImpl {
     }
 
     public boolean updatePayment(PaymentDto paymentDto) {
-        Patient patient = patientDAO.getAllById(paymentDto.getPatientId());
-        TherapyProgram therapyProgram = therapyProgramDAO.getAllById(paymentDto.getProgramId());
-        TherapySession therapySession = therapySessionDAO.getAllById(paymentDto.getTherapySessionId());
+//        Patient patient = patientDAO.getAllById(paymentDto.getPatientId());
+//        TherapyProgram therapyProgram = therapyProgramDAO.getAllById(paymentDto.getProgramId());
+//        TherapySession therapySession = therapySessionDAO.getAllById(paymentDto.getTherapySessionId());
         Payment payment = new Payment(
                 paymentDto.getId(),
                 paymentDto.getAmount(),
                 paymentDto.getInstallment(),
                 paymentDto.getStatus(),
                 paymentDto.getBalance(),
-                paymentDto.getDate(),
-                patient,
-                therapyProgram,
-                therapySession
+                paymentDto.getDate()
         );
-        return paymentDAO.update(payment);
+        System.out.println("PatientId = "+paymentDto.getPatientId()+" Program- "+paymentDto.getProgramId());
+        return paymentDAO.update(payment,paymentDto.getTherapySessionId(),paymentDto.getPatientId(),paymentDto.getProgramId());
     }
 
     public PaymentDto getAllById(String paymentId) {
@@ -80,6 +78,32 @@ public class PaymentBOImpl {
     }
 
     public boolean delete(String paymentId) {
+        return paymentDAO.delete(paymentId);
+    }
+
+    public ArrayList<PaymentDto> getAll(){
+        ArrayList<Payment> payments = paymentDAO.getAll();
+        ArrayList<PaymentDto> paymentDtos = new ArrayList<>();
+        for (Payment payment : payments){
+            PaymentDto paymentDto = new PaymentDto(
+                    payment.getId(),
+                    payment.getAmount(),
+                    payment.getInstallment(),
+                    payment.getStatus(),
+                    payment.getBalance(),
+                    payment.getDate(),
+                    payment.getPatient().getId(),
+                    payment.getProgram().getId(),
+                    (payment.getTherapySession() != null && payment.getTherapySession().getId() != null)
+                            ? payment.getTherapySession().getId()
+                            : "No"
+            );
+            paymentDtos.add(paymentDto);
+        }
+        return paymentDtos;
+    }
+
+    public boolean deleteSession(String paymentId) {
         return paymentDAO.delete(paymentId);
     }
 }

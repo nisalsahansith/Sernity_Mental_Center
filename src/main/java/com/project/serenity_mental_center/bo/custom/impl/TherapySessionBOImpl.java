@@ -3,6 +3,7 @@ package com.project.serenity_mental_center.bo.custom.impl;
 import com.project.serenity_mental_center.dao.custom.impl.TherapistProgramDAOImpl;
 import com.project.serenity_mental_center.dao.custom.impl.TherapySessionDAOImpl;
 import com.project.serenity_mental_center.dto.Custom;
+import com.project.serenity_mental_center.dto.PatientDto;
 import com.project.serenity_mental_center.dto.TherapySessionDTO;
 import com.project.serenity_mental_center.entity.TherapistProgram;
 import com.project.serenity_mental_center.entity.TherapySession;
@@ -171,6 +172,19 @@ public class TherapySessionBOImpl {
                 therapySessionDTO.getDate(),
                 therapySessionDTO.getStartTime(),
                 therapySessionDTO.getEndTime());
+    }
+
+    public boolean deleteSession(String sessionId) {
+        return therapySessionDAO.delete(sessionId);
+    }
+
+    public ArrayList<String> getAllId() {
+        ArrayList<TherapySessionDTO> therapySessions = getAll();
+        ArrayList<String> patientIds = new ArrayList<>();
+        for (TherapySessionDTO therapySession: therapySessions){
+            patientIds.add(therapySession.getId());
+        }
+        return patientIds;
     }
 }
 

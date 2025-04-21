@@ -104,6 +104,7 @@ public class AdminHomePageController {
                 navigateTo("/view/RegisterToProgram.fxml");
         }
 
+
         public void navigateTo(String path) {
                 try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource(path));

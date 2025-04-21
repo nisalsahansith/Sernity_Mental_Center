@@ -40,4 +40,13 @@ public class Payment {
     @JoinColumn(name = "therapy_session_id")
     @Nullable
     private TherapySession therapySession;
+
+    public Payment(String id, double amount, String installment, String status, double balance, Date date) {
+        this.id = id;
+        this.amount = amount;
+        this.installment = installment;
+        this.status = status;
+        this.balance = balance;
+        this.date = date;
+    }
 }
