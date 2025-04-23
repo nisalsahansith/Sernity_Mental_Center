@@ -1,21 +1,19 @@
 package com.project.serenity_mental_center.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Setter
-public class Custom {
+public class CustomDto {
     private String day;
     private String availableTimeList;
 
@@ -28,39 +26,47 @@ public class Custom {
     public Date date;
     public String time;
 
-    public Custom(Date date, String time) {
+    public java.util.Date dates;
+    public long count;
+
+    public CustomDto(java.util.Date dates, long count) {
+        this.dates = dates;
+        this.count = count;
+    }
+
+    public CustomDto(Date date, String time) {
         this.date = date;
         this.time = time;
     }
 
-    public Custom(Time startTime, Time endTime) {
+    public CustomDto(Time startTime, Time endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public Custom(String time, Date date) {
+    public CustomDto(String time, Date date) {
         this.time = time;
         this.date = date;
     }
 
-    public Custom(String day, String availableTimeList) {
+    public CustomDto(String day, String availableTimeList) {
         this.day = day;
         this.availableTimeList = availableTimeList;
     }
 
-    public Custom(LocalTime end, LocalTime start, String day, String therapistId) {
+    public CustomDto(LocalTime end, LocalTime start, String day, String therapistId) {
         this.end = end;
         this.start = start;
         this.Day = day;
         this.therapistId = therapistId;
     }
 
-    public Custom(LocalTime start, LocalTime end, String day) {
+    public CustomDto(LocalTime start, LocalTime end, String day) {
         this.start = start;
         this.end = end;
         this.day = day;
     }
-    public Custom(LocalTime start, LocalTime end) {
+    public CustomDto(LocalTime start, LocalTime end) {
         this.start = start;
         this.end = end;
     }

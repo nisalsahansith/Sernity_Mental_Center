@@ -30,7 +30,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="txtPatientId" layoutX="144.0" prefHeight="27.0" prefWidth="275.0" style="-fx-border-color: black; -fx-background-color: white;" />
+            <TextField fx:id="txtPatientId" disable="true" layoutX="144.0" prefHeight="27.0" prefWidth="275.0" style="-fx-border-color: black; -fx-background-color: white;" />
          </children>
       </Group>
       <Group layoutX="693.0" layoutY="134.0">

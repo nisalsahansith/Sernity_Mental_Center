@@ -1,5 +1,8 @@
 package com.project.serenity_mental_center.bo.custom.impl;
 
+import com.project.serenity_mental_center.bo.custom.UserBO;
+import com.project.serenity_mental_center.dao.DAOFactory;
+import com.project.serenity_mental_center.dao.custom.impl.PatientDAOImpl;
 import com.project.serenity_mental_center.dao.custom.impl.UserDAOImpl;
 import com.project.serenity_mental_center.dto.UserDto;
 import com.project.serenity_mental_center.entity.User;
@@ -7,8 +10,8 @@ import com.project.serenity_mental_center.entity.User;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class UserBOImpl {
-    private UserDAOImpl userDAO = new UserDAOImpl();
+public class UserBOImpl implements UserBO {
+    private UserDAOImpl userDAO = (UserDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.USER);
     public String getPassword(String username) {
         return userDAO.getPassword(username);
     }
@@ -64,5 +67,29 @@ public class UserBOImpl {
 
     public boolean deleteUser(String userId) {
         return userDAO.delete(userId);
+    }
+
+    public UserDto getAllByUserName(String userName, String password) {
+        User user = userDAO.getAllByUserCredential(userName,password);
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole(),
+                user.getEmail()
+        );
+    }
+
+    public boolean update(UserDto userDto, String newPwd) {
+        User user = new User(
+                userDto.getId(),
+                userDto.getName(),
+                userDto.getUsername(),
+                newPwd,
+                userDto.getRole(),
+                userDto.getEmail()
+        );
+        return userDAO.update(user);
     }
 }

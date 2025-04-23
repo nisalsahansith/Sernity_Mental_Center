@@ -1,5 +1,8 @@
 package com.project.serenity_mental_center.bo.custom.impl;
 
+import com.project.serenity_mental_center.bo.custom.TherapistBO;
+import com.project.serenity_mental_center.dao.DAOFactory;
+import com.project.serenity_mental_center.dao.custom.impl.PatientDAOImpl;
 import com.project.serenity_mental_center.dao.custom.impl.TherapistDAOImpl;
 import com.project.serenity_mental_center.dto.TherapistDto;
 import com.project.serenity_mental_center.dto.TherapistProgramDto;
@@ -10,11 +13,11 @@ import com.project.serenity_mental_center.entity.TherapyProgram;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TherapistBOImpl {
-    private TherapistDAOImpl therapistDAO = new TherapistDAOImpl();
+public class TherapistBOImpl implements TherapistBO {
+    private TherapistDAOImpl therapistDAO = (TherapistDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPIST);
 
     public ArrayList<TherapistDto> getAllTherapist() {
-        List<Therapist> therapists = therapistDAO.getAllTherapist();
+        List<Therapist> therapists = therapistDAO.getAll();
         ArrayList<TherapistDto> therapistDtoList = new ArrayList<TherapistDto>();
         for (Therapist therapist : therapists) {
             TherapistDto therapistDto = new TherapistDto(

@@ -1,14 +1,20 @@
 package com.project.serenity_mental_center.bo.custom.impl;
 
+import com.project.serenity_mental_center.bo.custom.PatientBO;
+import com.project.serenity_mental_center.dao.DAOFactory;
 import com.project.serenity_mental_center.dao.custom.impl.PatientDAOImpl;
+import com.project.serenity_mental_center.dao.custom.impl.TherapySessionDAOImpl;
 import com.project.serenity_mental_center.dto.PatientDto;
+import com.project.serenity_mental_center.dto.TherapySessionDTO;
 import com.project.serenity_mental_center.entity.Patient;
+import com.project.serenity_mental_center.entity.TherapySession;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatientBOImpl {
-    private PatientDAOImpl patientDAO = new PatientDAOImpl();
+public class PatientBOImpl implements PatientBO {
+    private PatientDAOImpl patientDAO = (PatientDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.PATIENT);
+    private TherapySessionDAOImpl therapySessionDAO = (TherapySessionDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPY_SESSION);
 
     public boolean savePatient(PatientDto patientDto) {
         Patient patient = new Patient(
@@ -73,5 +79,23 @@ public class PatientBOImpl {
             patientIds.add(patientDto.getId());
         }
         return patientIds;
+    }
+
+    public ArrayList<TherapySessionDTO> getAllById(String patientId) {
+        ArrayList<TherapySession> therapySession = therapySessionDAO.getAllByIdPatientId(patientId);
+        ArrayList<TherapySessionDTO> therapySessionDTOS = new ArrayList<>();
+        for (TherapySession therapySession1 : therapySession){
+            TherapySessionDTO therapySessionDTO = new TherapySessionDTO(
+                    therapySession1.getId(),
+                    therapySession1.getDate(),
+                    therapySession1.getStartTime(),
+                    therapySession1.getEndTime(),
+                    therapySession1.getTherapist().getId(),
+                    therapySession1.getPatient().getId(),
+                    therapySession1.getTherapyProgram().getId()
+            );
+            therapySessionDTOS.add(therapySessionDTO);
+        }
+        return therapySessionDTOS;
     }
 }

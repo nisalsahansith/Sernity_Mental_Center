@@ -1,6 +1,7 @@
 package com.project.serenity_mental_center.dao.custom.impl;
 
 import com.project.serenity_mental_center.config.FactoryConfiguration;
+import com.project.serenity_mental_center.dao.custom.TherapistProgramDAO;
 import com.project.serenity_mental_center.entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,7 +11,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TherapistProgramDAOImpl {
+public class TherapistProgramDAOImpl implements TherapistProgramDAO {
     private final FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
     public boolean save(TherapistProgramId therapistProgramId, String therapistId, String programId, String day, LocalTime startTime, LocalTime endTime) {
         Session session = factoryConfiguration.getSession();
@@ -33,7 +34,32 @@ public class TherapistProgramDAOImpl {
         }
     }
 
-    public List<TherapistProgram> getAll() {
+    @Override
+    public String getLastId() {
+        return "";
+    }
+
+    @Override
+    public boolean save(TherapistProgram dto) {
+        return false;
+    }
+
+    @Override
+    public boolean update(TherapistProgram dto) {
+        return false;
+    }
+
+    @Override
+    public TherapistProgram getAllById(String paymentId) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(String paymentId) {
+        return false;
+    }
+
+    public ArrayList<TherapistProgram> getAll() {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = session.beginTransaction();
         List<TherapistProgram> therapistPrograms = null;
@@ -49,7 +75,7 @@ public class TherapistProgramDAOImpl {
         }finally {
             session.close();
         }
-        return therapistPrograms;
+        return (ArrayList<TherapistProgram>) therapistPrograms;
     }
 
     public boolean update(TherapistProgramId therapistProgramId, String therapistId, String programId, String day, LocalTime startTime, LocalTime endTime) {

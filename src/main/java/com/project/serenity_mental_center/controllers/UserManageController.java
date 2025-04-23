@@ -1,5 +1,7 @@
 package com.project.serenity_mental_center.controllers;
 
+import com.project.serenity_mental_center.bo.BOFactory;
+import com.project.serenity_mental_center.bo.custom.impl.TherapistBOImpl;
 import com.project.serenity_mental_center.bo.custom.impl.UserBOImpl;
 import com.project.serenity_mental_center.dto.UserDto;
 import com.project.serenity_mental_center.dto.tm.UserTM;
@@ -59,7 +61,7 @@ public class UserManageController implements Initializable {
     @FXML
     private Pane userPane;
 
-    UserBOImpl userBO = new UserBOImpl();
+    UserBOImpl userBO = (UserBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.USER);
 
     @FXML
     void deleteProgram(ActionEvent event) {

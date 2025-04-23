@@ -1,5 +1,9 @@
 package com.project.serenity_mental_center.bo.custom.impl;
 
+import com.project.serenity_mental_center.bo.custom.TherapyProgramBO;
+import com.project.serenity_mental_center.dao.DAOFactory;
+import com.project.serenity_mental_center.dao.custom.TherapyProgramDAO;
+import com.project.serenity_mental_center.dao.custom.impl.PatientDAOImpl;
 import com.project.serenity_mental_center.dao.custom.impl.TherapyProgramDAOImpl;
 import com.project.serenity_mental_center.dto.TherapyProgramDto;
 import com.project.serenity_mental_center.entity.TherapyProgram;
@@ -7,8 +11,8 @@ import com.project.serenity_mental_center.entity.TherapyProgram;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TherapyProgramBOImpl {
-    private TherapyProgramDAOImpl therapyProgramDAO = new TherapyProgramDAOImpl();
+public class TherapyProgramBOImpl implements TherapyProgramBO {
+    private TherapyProgramDAOImpl therapyProgramDAO = (TherapyProgramDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.THERAPY_PROGRAM);
     public String getNextId() {
         String lastId = therapyProgramDAO.getLastId();
         if (lastId != null) {

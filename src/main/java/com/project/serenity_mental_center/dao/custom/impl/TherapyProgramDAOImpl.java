@@ -1,6 +1,7 @@
 package com.project.serenity_mental_center.dao.custom.impl;
 
 import com.project.serenity_mental_center.config.FactoryConfiguration;
+import com.project.serenity_mental_center.dao.custom.TherapyProgramDAO;
 import com.project.serenity_mental_center.entity.Patient;
 import com.project.serenity_mental_center.entity.TherapyProgram;
 import org.hibernate.Session;
@@ -10,7 +11,7 @@ import org.hibernate.query.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TherapyProgramDAOImpl {
+public class TherapyProgramDAOImpl implements TherapyProgramDAO {
     private FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
     public String getLastId() {
         Session session = factoryConfiguration.getSession();
@@ -20,7 +21,7 @@ public class TherapyProgramDAOImpl {
         return lastId;
     }
 
-    public List<TherapyProgram> getAll() {
+    public ArrayList<TherapyProgram> getAll() {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = null;
         List<TherapyProgram> therapyPrograms = null;
@@ -38,7 +39,7 @@ public class TherapyProgramDAOImpl {
         } finally {
             session.close();
         }
-        return therapyPrograms;
+        return (ArrayList<TherapyProgram>) therapyPrograms;
     }
 
     public boolean save(TherapyProgram therapyProgram) {

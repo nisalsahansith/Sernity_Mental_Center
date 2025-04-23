@@ -1,6 +1,7 @@
 package com.project.serenity_mental_center.dao.custom.impl;
 
 import com.project.serenity_mental_center.config.FactoryConfiguration;
+import com.project.serenity_mental_center.dao.custom.PatientProgramDAO;
 import com.project.serenity_mental_center.entity.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,8 +11,34 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PatientProgramDAOImpl {
+public class PatientProgramDAOImpl implements PatientProgramDAO {
     FactoryConfiguration factoryConfiguration = FactoryConfiguration.getInstance();
+
+    @Override
+    public String getLastId() {
+        return "";
+    }
+
+    @Override
+    public boolean save(PatientProgram dto) {
+        return false;
+    }
+
+    @Override
+    public boolean update(PatientProgram dto) {
+        return false;
+    }
+
+    @Override
+    public PatientProgram getAllById(String paymentId) {
+        return null;
+    }
+
+    @Override
+    public boolean delete(String paymentId) {
+        return false;
+    }
+
     public ArrayList<PatientProgram> getAll() {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = null;

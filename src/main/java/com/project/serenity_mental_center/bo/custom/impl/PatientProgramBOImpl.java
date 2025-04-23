@@ -1,5 +1,8 @@
 package com.project.serenity_mental_center.bo.custom.impl;
 
+import com.project.serenity_mental_center.bo.BOFactory;
+import com.project.serenity_mental_center.bo.custom.PatientProgramBO;
+import com.project.serenity_mental_center.dao.DAOFactory;
 import com.project.serenity_mental_center.dao.custom.impl.*;
 import com.project.serenity_mental_center.dto.PatientProgramDto;
 import com.project.serenity_mental_center.dto.PaymentDto;
@@ -7,9 +10,9 @@ import com.project.serenity_mental_center.entity.*;
 
 import java.util.ArrayList;
 
-public class PatientProgramBOImpl {
-    PatientProgramDAOImpl patientProgramDAO = new PatientProgramDAOImpl();
-    PaymentBOImpl paymentBO = new PaymentBOImpl();
+public class PatientProgramBOImpl implements PatientProgramBO {
+    PatientProgramDAOImpl patientProgramDAO = (PatientProgramDAOImpl) DAOFactory.getInstance().getDAO(DAOFactory.DAOType.PATIENT_PROGRAM);
+    PaymentBOImpl paymentBO = (PaymentBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
     public ArrayList<PatientProgramDto> getAllPatientProgram() {
         ArrayList<PatientProgram> patientPrograms = patientProgramDAO.getAll();
         ArrayList<PatientProgramDto> patientProgramDtos = new ArrayList<>();

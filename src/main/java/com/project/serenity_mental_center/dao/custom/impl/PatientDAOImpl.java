@@ -30,7 +30,7 @@ public class PatientDAOImpl implements PatientDAO {
         }
     }
 
-    public List<Patient> getAll() {
+    public ArrayList<Patient> getAll() {
         Session session = factoryConfiguration.getSession();
         Transaction transaction = null;
         List<Patient> patients = null;
@@ -48,7 +48,7 @@ public class PatientDAOImpl implements PatientDAO {
         } finally {
             session.close();
         }
-        return patients;
+        return (ArrayList<Patient>) patients;
     }
 
     public String getLastId() {

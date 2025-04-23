@@ -105,6 +105,6 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <TextField fx:id="txtPaymentId" layoutX="731.0" layoutY="144.0" prefHeight="27.0" prefWidth="275.0" style="-fx-border-color: black; -fx-background-color: white;" />
+      <TextField fx:id="txtPaymentId" disable="true" layoutX="731.0" layoutY="144.0" prefHeight="27.0" prefWidth="275.0" style="-fx-border-color: black; -fx-background-color: white;" />
    </children>
 </Pane>

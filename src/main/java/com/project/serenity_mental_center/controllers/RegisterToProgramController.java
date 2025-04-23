@@ -1,12 +1,11 @@
 package com.project.serenity_mental_center.controllers;
 
-import com.project.serenity_mental_center.bo.custom.impl.PatientBOImpl;
-import com.project.serenity_mental_center.bo.custom.impl.PatientProgramBOImpl;
-import com.project.serenity_mental_center.bo.custom.impl.PaymentBOImpl;
-import com.project.serenity_mental_center.bo.custom.impl.TherapyProgramBOImpl;
+import com.project.serenity_mental_center.bo.BOFactory;
+import com.project.serenity_mental_center.bo.custom.impl.*;
 import com.project.serenity_mental_center.dto.PatientProgramDto;
 import com.project.serenity_mental_center.dto.PaymentDto;
 import com.project.serenity_mental_center.dto.tm.PatientProgramTM;
+import com.project.serenity_mental_center.util.Validation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -88,10 +87,10 @@ public class RegisterToProgramController implements Initializable {
     @FXML
     private TextField txtStatus;
 
-    PatientProgramBOImpl patientProgramBO = new PatientProgramBOImpl();
-    PaymentBOImpl paymentBO = new PaymentBOImpl();
-    PatientBOImpl patientBO = new PatientBOImpl();
-    TherapyProgramBOImpl therapyProgramBO = new TherapyProgramBOImpl();
+    PatientProgramBOImpl patientProgramBO = (PatientProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT_PROGRAM);
+    PaymentBOImpl paymentBO = (PaymentBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PAYMENT);
+    PatientBOImpl patientBO = (PatientBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.PATIENT);
+    TherapyProgramBOImpl therapyProgramBO = (TherapyProgramBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.THERAPY_PROGRAM);
 
     @FXML
     void delete(ActionEvent event) {
@@ -148,6 +147,18 @@ public class RegisterToProgramController implements Initializable {
         String status = txtStatus.getText();
         String installment = txtInstallement.getText();
         double balance = Double.parseDouble(txtBalance.getText());
+        boolean isValidAmount = Validation.isValid(String.valueOf(ammount),"price");
+        boolean isValidBalance = Validation.isValid(String.valueOf(balance),"price");
+        if (!isValidAmount){
+            txtAmmount.setStyle("-fx-border-color: red");
+        }else {
+            txtAmmount.setStyle("-fx-border-color: black");
+        }
+        if (!isValidBalance){
+            txtBalance.setStyle("-fx-border-color: red");
+        }else {
+            txtBalance.setStyle("-fx-border-color: black");
+        }
         PaymentDto paymentDto = new PaymentDto(
                 programId,
                 patientId,
@@ -164,12 +175,16 @@ public class RegisterToProgramController implements Initializable {
                 date,
                 paymentId
         );
-        boolean isSave = patientProgramBO.savePatientProgram(patientProgramDto,paymentDto);
-        if (isSave){
-            refreshPage();
-            new Alert(Alert.AlertType.INFORMATION,"Patient Registration To Program is Success").show();
+        if (isValidAmount && isValidBalance && !paymentId.isEmpty() && !programId.isEmpty() && !patientId.isEmpty() && !installment.isEmpty() && !status.isEmpty()) {
+            boolean isSave = patientProgramBO.savePatientProgram(patientProgramDto, paymentDto);
+            if (isSave) {
+                refreshPage();
+                new Alert(Alert.AlertType.INFORMATION, "Patient Registration To Program is Success").show();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Patient Registration To Program is Not Success").show();
+            }
         }else {
-            new Alert(Alert.AlertType.INFORMATION,"Patient Registration To Program is Not Success").show();
+            new Alert(Alert.AlertType.ERROR, "Invalid Or null input").show();
         }
     }
 
@@ -184,42 +199,66 @@ public class RegisterToProgramController implements Initializable {
         String status = txtStatus.getText();
         String installment = txtInstallement.getText();
         double balance = Double.parseDouble(txtBalance.getText());
-        PaymentDto paymentDto = new PaymentDto(
-                programId,
-                patientId,
-                date,
-                balance,
-                status,
-                installment,
-                ammount,
-                paymentId
-        );
-        PatientProgramDto patientProgramDto = new PatientProgramDto(
-                patientId,
-                programId,
-                date,
-                paymentId
-        );
-        boolean isUpdate = patientProgramBO.updatePatientProgram(patientProgramDto,paymentDto);
-        if (isUpdate){
-            refreshPage();
-            new Alert(Alert.AlertType.INFORMATION,"Patient Registration To Program is Updated").show();
+        boolean isValidAmount = Validation.isValid(String.valueOf(ammount),"price");
+        boolean isValidBalance = Validation.isValid(String.valueOf(balance),"price");
+        if (!isValidAmount){
+            txtAmmount.setStyle("-fx-border-color: red");
         }else {
-            new Alert(Alert.AlertType.INFORMATION,"Patient Registration To Program is Not Update").show();
+            txtAmmount.setStyle("-fx-border-color: black");
+        }
+        if (!isValidBalance){
+            txtBalance.setStyle("-fx-border-color: red");
+        }else {
+            txtBalance.setStyle("-fx-border-color: black");
+        }
+        if (isValidAmount && isValidBalance && !paymentId.isEmpty() && !programId.isEmpty() && !patientId.isEmpty() && !installment.isEmpty() && !status.isEmpty()) {
+            PaymentDto paymentDto = new PaymentDto(
+                    programId,
+                    patientId,
+                    date,
+                    balance,
+                    status,
+                    installment,
+                    ammount,
+                    paymentId
+            );
+            PatientProgramDto patientProgramDto = new PatientProgramDto(
+                    patientId,
+                    programId,
+                    date,
+                    paymentId
+            );
+            boolean isUpdate = patientProgramBO.updatePatientProgram(patientProgramDto, paymentDto);
+            if (isUpdate) {
+                refreshPage();
+                new Alert(Alert.AlertType.INFORMATION, "Patient Registration To Program is Updated").show();
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Patient Registration To Program is Not Update").show();
+            }
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Invalid Or null input").show();
         }
     }
 
     @FXML
     void setBalance(KeyEvent event) {
-        try {
-            String programID = cmbPrograms.getSelectionModel().getSelectedItem();
-            double fee = therapyProgramBO.getFee(programID);
-            System.out.println(fee);
-            double amount = Double.parseDouble(txtAmmount.getText());
-            double balance = fee - amount;
-            txtBalance.setText(String.valueOf(balance));
-        } catch (NumberFormatException e) {
-            throw new RuntimeException(e);
+        boolean isValidAmount = Validation.isValid(String.valueOf(txtAmmount.getText()),"price");
+        if (!isValidAmount){
+            txtAmmount.setStyle("-fx-border-color: red");
+        }else {
+            txtAmmount.setStyle("-fx-border-color: black");
+        }
+        if (isValidAmount) {
+            try {
+                String programID = cmbPrograms.getSelectionModel().getSelectedItem();
+                double fee = therapyProgramBO.getFee(programID);
+                System.out.println(fee);
+                double amount = Double.parseDouble(txtAmmount.getText());
+                double balance = fee - amount;
+                txtBalance.setText(String.valueOf(balance));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

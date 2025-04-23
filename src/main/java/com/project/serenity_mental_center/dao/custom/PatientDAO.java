@@ -1,4 +1,8 @@
 package com.project.serenity_mental_center.dao.custom;
 
-public interface PatientDAO {
+import com.project.serenity_mental_center.dao.CrudDAO;
+import com.project.serenity_mental_center.entity.Patient;
+
+
+public interface PatientDAO extends CrudDAO<Patient> {
 }

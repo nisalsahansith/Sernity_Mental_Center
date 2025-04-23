@@ -26,7 +26,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="txtPaymentId" layoutX="143.0" prefHeight="27.0" prefWidth="275.0" style="-fx-border-color: black; -fx-background-color: white;" />
+            <TextField fx:id="txtPaymentId" disable="true" layoutX="143.0" prefHeight="27.0" prefWidth="275.0" style="-fx-border-color: black; -fx-background-color: white;" />
          </children>
       </Group>
       <Group layoutX="694.0" layoutY="107.0">

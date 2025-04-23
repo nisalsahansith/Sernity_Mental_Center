@@ -117,5 +117,7 @@
             <TextField fx:id="txtEndTime" layoutX="144.0" prefHeight="27.0" prefWidth="172.0" style="-fx-border-color: black; -fx-background-color: white;" />
          </children>
       </Group>
+      <Label layoutX="582.0" layoutY="433.0" prefHeight="17.0" prefWidth="172.0" text="(08:00)" />
+      <Label layoutX="933.0" layoutY="435.0" prefHeight="17.0" prefWidth="172.0" text="(20:00)" />
    </children>
 </Pane>

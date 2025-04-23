@@ -6,6 +6,8 @@ module com.project.serenity_mental_center {
     requires static lombok;
     requires java.naming;
     requires org.jetbrains.annotations;
+    requires jbcrypt;
+    requires net.sf.jasperreports.core;
 
 
     opens com.project.serenity_mental_center.controllers to javafx.fxml;

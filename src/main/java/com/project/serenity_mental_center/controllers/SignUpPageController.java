@@ -1,22 +1,23 @@
 package com.project.serenity_mental_center.controllers;
 
+import com.project.serenity_mental_center.bo.BOFactory;
+import com.project.serenity_mental_center.bo.custom.impl.TherapistBOImpl;
 import com.project.serenity_mental_center.bo.custom.impl.UserBOImpl;
 import com.project.serenity_mental_center.dto.UserDto;
 import com.project.serenity_mental_center.entity.User;
+import com.project.serenity_mental_center.util.EncryptPassword;
+import com.project.serenity_mental_center.util.Validation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -32,6 +33,11 @@ public class SignUpPageController implements Initializable {
     @FXML
     private Button btnSignUp;
 
+    @FXML
+    private Group grpHidePassword;
+
+    @FXML
+    private Group grptxtshowPassword;
 
     @FXML
     private Label lblError;
@@ -64,12 +70,15 @@ public class SignUpPageController implements Initializable {
     private PasswordField txtPassword;
 
     @FXML
+    private TextField txtPasswordField;
+
+    @FXML
     private ComboBox<String> cmbRole;
 
     @FXML
     private TextField txtUserName;
 
-    UserBOImpl userBO = new UserBOImpl();
+    UserBOImpl userBO = (UserBOImpl) BOFactory.getInstance().getBO(BOFactory.BOType.USER);
 
     @FXML
     void navigateLogin(MouseEvent event) {
@@ -91,39 +100,55 @@ public class SignUpPageController implements Initializable {
     void navigateToHome(ActionEvent event) {
         String name = txtName.getText();
         String email = txtEmail.getText();
-        String password = txtPassword.getText();
+        boolean isCorrectEmail = Validation.isValid(email,"gmail");
+        if (!isCorrectEmail){
+            txtEmail.setStyle("-fx-border-color: red");
+        }else {
+            txtEmail.setStyle("-fx-border-color: black");
+        }
+        String password ;
+        if (txtPassword.isVisible()){
+            password = txtPassword.getText();
+        }else {
+            password = txtPasswordField.getText();
+        }
         String role = cmbRole.getSelectionModel().getSelectedItem();
         String userName = txtUserName.getText();
         String userId = userBO.getNextUserId();
-        boolean isHasEmail = userBO.getUserEmail(email);
-        if (!isHasEmail) {
-            UserDto userDto = new UserDto(
-                    userId,
-                    name,
-                    userName,
-                    password,
-                    role,
-                    email
-            );
-            boolean isSave = userBO.saveUser(userDto);
-            if (isSave) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginPage.fxml"));
-                    Parent homePageRoot = loader.load();
-                    Scene homeScene = new Scene(homePageRoot);
+        if (isCorrectEmail && !name.isEmpty() && !password.isEmpty() && !role.isEmpty() && !userName.isEmpty() && !userId.isEmpty()) {
+            boolean isHasEmail = userBO.getUserEmail(email);
+            if (!isHasEmail) {
+                String hashPassword = EncryptPassword.hashPassword(password);
+                UserDto userDto = new UserDto(
+                        userId,
+                        name,
+                        userName,
+                        hashPassword,
+                        role,
+                        email
+                );
+                boolean isSave = userBO.saveUser(userDto);
+                if (isSave) {
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginPage.fxml"));
+                        Parent homePageRoot = loader.load();
+                        Scene homeScene = new Scene(homePageRoot);
 
-                    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    primaryStage.setScene(homeScene);
-                    primaryStage.setTitle("Login Page");
-                    primaryStage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        primaryStage.setScene(homeScene);
+                        primaryStage.setTitle("Login Page");
+                        primaryStage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    lblError.setText("Sign Up is failed");
                 }
             } else {
-                lblError.setText("Sign Up is failed");
+                lblError.setText("This email is already use");
             }
         }else {
-            lblError.setText("This email is already use");
+            new Alert(Alert.AlertType.ERROR,"Invalid or Null input").show();
         }
     }
 
@@ -134,4 +159,18 @@ public class SignUpPageController implements Initializable {
         cmbRole.setItems(roleList);
     }
 
+
+    @FXML
+    void hidePassword(MouseEvent event) {
+        grptxtshowPassword.setVisible(false);
+        grpHidePassword.setVisible(true);
+    }
+
+    @FXML
+    void showPassword(MouseEvent event) {
+        String pw = txtPassword.getText();
+        txtPasswordField.setText(pw);
+        grptxtshowPassword.setVisible(true);
+        grpHidePassword.setVisible(false);
+    }
 }
