@@ -71,6 +71,9 @@ public class UserBOImpl implements UserBO {
 
     public UserDto getAllByUserName(String userName, String password) {
         User user = userDAO.getAllByUserCredential(userName,password);
+        if (user == null){
+            return null;
+        }
         return new UserDto(
                 user.getId(),
                 user.getName(),
